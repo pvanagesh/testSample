@@ -36,8 +36,26 @@
 
     <script>
         function sayHello() {
-           const myVar = process.env.MY_ENV_VAR;
-        console.log('Environment Variable:', myVar);
+            const postData = {
+                "line1": "options = ChromeOptions()",
+				  "line2": "options.add_experimental_option(\"detach\", True)",
+				  "line3": "driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)"
+            };
+
+            fetch('http://127.0.0.1:5000/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('status').textContent = 'Error: ' + error;
+            });
         }
     </script>
 </body>
